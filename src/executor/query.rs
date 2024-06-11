@@ -150,6 +150,15 @@ impl QueryResult {
             _ => unreachable!(),
         }
     }
+
+    /// Access the underlying `PgRow` if we use the Postgres backend.
+    #[cfg(feature = "sqlx-postgres")]
+    pub fn try_as_pg_row(&self) -> Option<&sqlx::postgres::PgRow> {
+        match &self.row {
+            QueryResultRow::SqlxPostgres(pg_row) => Some(pg_row),
+            _ => None,
+        }
+    }
 }
 
 #[allow(unused_variables)]
