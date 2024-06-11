@@ -115,6 +115,15 @@ impl QueryResult {
     {
         Ok(T::try_get_many_by_index(self)?)
     }
+
+    /// Access the underlying `PgRow` if we use the Postgres backend.
+    #[cfg(feature = "sqlx-postgres")]
+    pub fn try_as_pg_row(&self) -> Option<&sqlx::postgres::PgRow> {
+        match &self.row {
+            QueryResultRow::SqlxPostgres(pg_row) => Some(pg_row),
+            _ => None,
+        }
+    }
 }
 
 #[allow(unused_variables)]
